@@ -94,8 +94,7 @@ class provider implements
                   FROM {context} ctx
                   JOIN {course_modules} cm ON cm.id = ctx.instanceid AND ctx.contextlevel = :contextlevel
                   JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                  JOIN {socratic} s ON s.id = cm.instance
-                  JOIN {socratic_conversations} c ON c.socraticid = s.id
+                  JOIN {socratic_conversations} c ON c.socraticid = cm.instance
                  WHERE c.userid = :learnerid OR c.teachercompletedby = :teacherid";
         $params = [
             'contextlevel' => CONTEXT_MODULE,
