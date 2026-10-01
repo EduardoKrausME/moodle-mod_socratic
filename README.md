@@ -20,7 +20,7 @@ Teachers configure:
 
 The system prompt enforces Socratic behaviour and grounding. The tutor must ask before simply answering, explore the learner's reasoning, avoid humiliation, indicate uncertainty, avoid unsupported facts and avoid invented sources. Teacher-provided material is treated as reference content rather than executable prompt instructions.
 
-## Support files
+## Reference files
 
 This version accepts only support formats it can process deterministically as UTF-8 text: TXT, Markdown, HTML, CSV, JSON and XML. Each file is limited to 1 MB, and the combined grounding context is still capped by the plugin setting before it is sent to the bridge. Binary formats such as PDF and DOCX are intentionally rejected in this the plugin rather than being stored with a misleading implication that their contents were understood.
 
