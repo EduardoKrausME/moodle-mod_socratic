@@ -11,18 +11,18 @@ Teachers configure:
 - activity name and introduction;
 - learning objective;
 - authoritative text/content base;
-- support files;
+- reference files;
 - additional tutor behaviour;
 - maximum interactions;
 - hint availability;
 - final-answer availability;
 - completion criterion.
 
-The system prompt enforces Socratic behaviour and grounding. The tutor must ask before simply answering, explore the learner's reasoning, avoid humiliation, indicate uncertainty, avoid unsupported facts and avoid invented sources. Teacher-provided material is treated as reference content rather than executable prompt instructions.
+The system prompt enforces Socratic behaviour and grounding. The tutor must ask before simply answering, explore the learner's reasoning, avoid humiliation, indicate uncertainty, avoid ungrounded facts and avoid invented sources. Teacher-provided material is treated as reference content rather than executable prompt instructions.
 
 ## Reference files
 
-This version accepts only support formats it can process deterministically as UTF-8 text: TXT, Markdown, HTML, CSV, JSON and XML. Each file is limited to 1 MB, and the combined grounding context is still capped by the plugin setting before it is sent to the bridge. Binary formats such as PDF and DOCX are intentionally rejected in this the plugin rather than being stored with a misleading implication that their contents were understood.
+The plugin accepts reference files it can process deterministically as UTF-8 text: TXT, Markdown, HTML, CSV, JSON and XML. Each file is limited to 1 MB, and the combined grounding context is capped by the plugin setting before it is sent to the bridge. Binary formats such as PDF and DOCX are rejected rather than being stored with a misleading implication that their contents were understood.
 
 ## Conversation persistence and retries
 
@@ -77,8 +77,8 @@ It covers both learner conversation ownership and the teacher identifier recorde
 
 ## UI
 
-The learner interface uses Mustache and AMD. It is intentionally presented as an "AI learning assistant" rather than a generic chatbot. The composer uses asynchronous Moodle external functions, disables controls during a request and supports retry after a recoverable AI failure.
+The learner interface uses Mustache and AMD. It is intentionally presented as an "AI learning assistant" rather than a generic chatbot. The composer uses asynchronous Moodle external functions, disables controls during a request and allows retry after a recoverable AI failure.
 
 ## Backup and restore
 
-Activity configuration, support files and, when user data is included, conversations/messages are supported by Moodle backup and restore.
+Activity configuration, reference files and, when user data is included, conversations/messages are included in Moodle backup and restore.
