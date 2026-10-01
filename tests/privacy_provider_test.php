@@ -73,8 +73,8 @@ final class privacy_provider_test extends advanced_testcase {
         $userlist = new userlist($context, 'mod_socratic');
         provider::get_users_in_context($userlist);
         $ids = $userlist->get_userids();
-        $this->assertContains($student->id, $ids);
-        $this->assertContains($teacher->id, $ids);
+        $this->assertContains((int)$student->id, $ids);
+        $this->assertContains((int)$teacher->id, $ids);
 
         provider::delete_data_for_all_users_in_context($context);
         $this->assertFalse($DB->record_exists('socratic_conversations', ['id' => $conversationid]));
@@ -106,7 +106,7 @@ final class privacy_provider_test extends advanced_testcase {
             'timemodified' => time(),
         ]);
 
-        $contexts = provider::get_contexts_for_userid($teacher->id);
-        $this->assertContains($context->id, $contexts->get_contextids());
+        $contexts = provider::get_contexts_for_userid((int)$teacher->id);
+        $this->assertContains((int)$context->id, $contexts->get_contextids());
     }
 }
