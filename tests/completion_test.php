@@ -35,6 +35,11 @@ use mod_socratic\completion\custom_completion;
  * @covers \mod_socratic\completion\custom_completion
  */
 final class completion_test extends advanced_testcase {
+    /**
+     * Method test_interaction_completion_rule.
+     *
+     * @return void Return value.
+     */
     public function test_interaction_completion_rule(): void {
         global $DB;
 
@@ -66,6 +71,11 @@ final class completion_test extends advanced_testcase {
         $this->assertSame(COMPLETION_COMPLETE, $completion->get_state('completioncondition'));
     }
 
+    /**
+     * Method test_teacher_completion_rule.
+     *
+     * @return void Return value.
+     */
     public function test_teacher_completion_rule(): void {
         global $DB;
 

@@ -37,6 +37,11 @@ use moodle_exception;
  * @covers \mod_socratic\local\conversation_service
  */
 final class conversation_service_test extends advanced_testcase {
+    /**
+     * Method test_bridge_failure_keeps_learner_message.
+     *
+     * @return void Return value.
+     */
     public function test_bridge_failure_keeps_learner_message(): void {
         global $DB;
 
@@ -44,6 +49,12 @@ final class conversation_service_test extends advanced_testcase {
         [$course, $activity, $user, $cm, $socratic] = $this->fixture();
         $this->setUser($user);
         $client = new class extends ai_client {
+            /**
+             * Method generate.
+             *
+             * @param array $messages Parameter messages.
+             * @return string Return value.
+             */
             public function generate(array $messages): string {
                 throw new moodle_exception('provider failed');
             }
@@ -63,6 +74,11 @@ final class conversation_service_test extends advanced_testcase {
         $this->assertSame('My reasoning', $DB->get_field('socratic_messages', 'content', ['conversationid' => $conversation->id]));
     }
 
+    /**
+     * Method test_retry_after_bridge_failure_reuses_pending_turn.
+     *
+     * @return void Return value.
+     */
     public function test_retry_after_bridge_failure_reuses_pending_turn(): void {
         global $DB;
 
@@ -71,6 +87,12 @@ final class conversation_service_test extends advanced_testcase {
         $this->setUser($user);
 
         $failingclient = new class extends ai_client {
+            /**
+             * Method generate.
+             *
+             * @param array $messages Parameter messages.
+             * @return string Return value.
+             */
             public function generate(array $messages): string {
                 throw new moodle_exception('provider failed');
             }
@@ -84,6 +106,12 @@ final class conversation_service_test extends advanced_testcase {
         }
 
         $blockingclient = new class extends ai_client {
+            /**
+             * Method generate.
+             *
+             * @param array $messages Parameter messages.
+             * @return string Return value.
+             */
             public function generate(array $messages): string {
                 return 'This should never be called for a different client id while a turn is pending.';
             }
@@ -97,7 +125,18 @@ final class conversation_service_test extends advanced_testcase {
         }
 
         $workingclient = new class extends ai_client {
+            /**
+             * Property calls.
+             *
+             * @var int
+             */
             public int $calls = 0;
+            /**
+             * Method generate.
+             *
+             * @param array $messages Parameter messages.
+             * @return string Return value.
+             */
             public function generate(array $messages): string {
                 $this->calls++;
                 return 'Which premise in your reasoning is the strongest?';
@@ -134,6 +173,11 @@ final class conversation_service_test extends advanced_testcase {
         ]));
     }
 
+    /**
+     * Method test_same_clientid_is_idempotent.
+     *
+     * @return void Return value.
+     */
     public function test_same_clientid_is_idempotent(): void {
         global $DB;
 
@@ -141,7 +185,18 @@ final class conversation_service_test extends advanced_testcase {
         [, $activity, $user, $cm, $socratic] = $this->fixture();
         $this->setUser($user);
         $client = new class extends ai_client {
+            /**
+             * Property calls.
+             *
+             * @var int
+             */
             public int $calls = 0;
+            /**
+             * Method generate.
+             *
+             * @param array $messages Parameter messages.
+             * @return string Return value.
+             */
             public function generate(array $messages): string {
                 $this->calls++;
                 return 'What evidence supports that conclusion?';
@@ -158,13 +213,29 @@ final class conversation_service_test extends advanced_testcase {
         $this->assertSame(2, $DB->count_records('socratic_messages', ['conversationid' => $conversation->id]));
     }
 
+    /**
+     * Method test_history_sent_to_ai_is_bounded_and_contains_system_grounding.
+     *
+     * @return void Return value.
+     */
     public function test_history_sent_to_ai_is_bounded_and_contains_system_grounding(): void {
         $this->resetAfterTest();
         [, , $user, $cm, $socratic] = $this->fixture();
         $this->setUser($user);
         set_config('historymessages', 4, 'mod_socratic');
         $client = new class extends ai_client {
+            /**
+             * Property calls.
+             *
+             * @var array
+             */
             public array $calls = [];
+            /**
+             * Method generate.
+             *
+             * @param array $messages Parameter messages.
+             * @return string Return value.
+             */
             public function generate(array $messages): string {
                 $this->calls[] = $messages;
                 return 'Please justify that step.';
@@ -181,6 +252,11 @@ final class conversation_service_test extends advanced_testcase {
         $this->assertStringContainsString('AUTHORITATIVE KNOWLEDGE BASE START', $last[0]['content']);
     }
 
+    /**
+     * Method test_message_template_escapes_html.
+     *
+     * @return void Return value.
+     */
     public function test_message_template_escapes_html(): void {
         global $PAGE, $OUTPUT;
 
@@ -196,6 +272,11 @@ final class conversation_service_test extends advanced_testcase {
         $this->assertStringContainsString('&lt;b&gt;unsafe&lt;/b&gt;', $html);
     }
 
+    /**
+     * Method fixture.
+     *
+     * @return array Return value.
+     */
     private function fixture(): array {
         global $DB;
 

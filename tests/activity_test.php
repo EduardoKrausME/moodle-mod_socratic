@@ -34,11 +34,21 @@ use advanced_testcase;
  * @coversNothing
  */
 final class activity_test extends advanced_testcase {
+    /**
+     * Method setUp.
+     *
+     * @return void Return value.
+     */
     protected function setUp(): void {
         parent::setUp();
         $this->resetAfterTest();
     }
 
+    /**
+     * Method test_activity_crud.
+     *
+     * @return void Return value.
+     */
     public function test_activity_crud(): void {
         global $DB;
 
@@ -64,6 +74,11 @@ final class activity_test extends advanced_testcase {
         $this->assertFalse($DB->record_exists('socratic', ['id' => $activity->id]));
     }
 
+    /**
+     * Method test_capabilities_for_student_and_teacher.
+     *
+     * @return void Return value.
+     */
     public function test_capabilities_for_student_and_teacher(): void {
         $course = $this->getDataGenerator()->create_course();
         $student = $this->getDataGenerator()->create_user();

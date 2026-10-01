@@ -36,6 +36,11 @@ use mod_socratic\privacy\provider;
  * @covers \mod_socratic\privacy\provider
  */
 final class privacy_provider_test extends advanced_testcase {
+    /**
+     * Method test_get_users_and_delete_all_in_context.
+     *
+     * @return void Return value.
+     */
     public function test_get_users_and_delete_all_in_context(): void {
         global $DB;
 
@@ -76,6 +81,11 @@ final class privacy_provider_test extends advanced_testcase {
         $this->assertFalse($DB->record_exists('socratic_messages', ['conversationid' => $conversationid]));
     }
 
+    /**
+     * Method test_contexts_include_teacher_completion_reference.
+     *
+     * @return void Return value.
+     */
     public function test_contexts_include_teacher_completion_reference(): void {
         global $DB;
 

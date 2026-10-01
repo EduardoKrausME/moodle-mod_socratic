@@ -29,21 +29,41 @@ namespace mod_socratic\event;
  * @package mod_socratic
  */
 class conversation_completed extends \core\event\base {
+    /**
+     * Method init.
+     *
+     * @return void Return value.
+     */
     protected function init(): void {
         $this->data['crud'] = 'u';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
         $this->data['objecttable'] = 'socratic_conversations';
     }
 
+    /**
+     * Method get_name.
+     *
+     * @return string Return value.
+     */
     public static function get_name(): string {
         return get_string('eventconversationcompleted', 'mod_socratic');
     }
 
+    /**
+     * Method get_description.
+     *
+     * @return string Return value.
+     */
     public function get_description(): string {
         $reason = $this->other['reason'] ?? 'unknown';
         return "Socratic conversation '{$this->objectid}' for user '{$this->relateduserid}' was completed ({$reason}).";
     }
 
+    /**
+     * Method get_objectid_mapping.
+     *
+     * @return array Return value.
+     */
     public static function get_objectid_mapping(): array {
         return ['db' => 'socratic_conversations', 'restore' => 'socratic_conversation'];
     }
