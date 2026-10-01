@@ -1,0 +1,98 @@
+.mod-socratic {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.socratic-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.socratic-kicker {
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    opacity: .7;
+}
+
+.socratic-objective {
+    border-left: 4px solid currentColor;
+    padding: .8rem 1rem;
+    margin: 1rem 0 1.25rem;
+    background: rgba(127, 127, 127, .06);
+}
+
+.socratic-chat {
+    border: 1px solid rgba(127, 127, 127, .25);
+    border-radius: .75rem;
+    overflow: hidden;
+}
+
+.socratic-messages {
+    display: flex;
+    flex-direction: column;
+    gap: .85rem;
+    padding: 1rem;
+    min-height: 12rem;
+    max-height: 58vh;
+    overflow-y: auto;
+}
+
+.socratic-message {
+    max-width: 86%;
+    padding: .75rem .9rem;
+    border-radius: .7rem;
+    border: 1px solid rgba(127, 127, 127, .22);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.socratic-message-user {
+    align-self: flex-end;
+    background: rgba(127, 127, 127, .09);
+}
+
+.socratic-message-assistant {
+    align-self: flex-start;
+}
+
+.socratic-message-meta {
+    display: flex;
+    gap: .75rem;
+    align-items: baseline;
+    margin-bottom: .3rem;
+    font-size: .82rem;
+    opacity: .75;
+}
+
+.socratic-composer,
+.socratic-status {
+    border-top: 1px solid rgba(127, 127, 127, .2);
+    padding: .85rem 1rem;
+}
+
+.socratic-status {
+    display: flex;
+    gap: .35rem;
+    font-size: .85rem;
+    opacity: .75;
+}
+
+.socratic-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+@media (max-width: 576px) {
+    .socratic-message {
+        max-width: 96%;
+    }
+    .socratic-header {
+        flex-direction: column;
+    }
+}

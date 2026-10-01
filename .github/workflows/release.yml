@@ -37,14 +37,14 @@ jobs:
         run: |
           VERSION="${{ steps.ver.outputs.version }}"
           rm -rf package
-          mkdir -p package/ai_bridge
-          git archive --format=tar HEAD | tar -x -C package/ai_bridge
-          rm -rf package/ai_bridge/.github
+          mkdir -p package/socratic
+          git archive --format=tar HEAD | tar -x -C package/socratic
+          rm -rf package/socratic/.github
           (
             cd package
-            zip -rq "../local_ai_bridge_${VERSION}.zip" ai_bridge
+            zip -rq "../mod_socratic_${VERSION}.zip" socratic
           )
-          if unzip -l "local_ai_bridge_${VERSION}.zip" | grep -q '/\.git/'; then
+          if unzip -l "mod_socratic_${VERSION}.zip" | grep -q '/\.git/'; then
             echo "The release archive unexpectedly contains .git."
             exit 1
           fi
@@ -68,7 +68,7 @@ jobs:
           body: |
             Release ${{ steps.ver.outputs.version }} automatically generated from commit
             ${{ github.event.head_commit.id }}.
-          files: local_ai_bridge_${{ steps.ver.outputs.version }}.zip
+          files: mod_socratic_${{ steps.ver.outputs.version }}.zip
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}

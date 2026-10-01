@@ -1,0 +1,10 @@
+{{!
+    @template mod_socratic/message
+}}
+<div class="socratic-message {{#isuser}}socratic-message-user{{/isuser}}{{#isassistant}}socratic-message-assistant{{/isassistant}}" role="listitem">
+    <div class="socratic-message-meta">
+        <strong>{{#isuser}}{{#str}}messageyou, mod_socratic{{/str}}{{/isuser}}{{#isassistant}}{{#str}}messagetutor, mod_socratic{{/str}}{{/isassistant}}</strong>
+        {{#time}}<span>{{time}}</span>{{/time}}
+    </div>
+    <div class="socratic-message-content">{{content}}</div>
+</div>

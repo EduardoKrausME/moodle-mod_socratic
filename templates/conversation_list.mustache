@@ -1,0 +1,29 @@
+{{!
+    @template mod_socratic/conversation_list
+}}
+<p><a href="{{activityurl}}">{{#str}}backtoactivity, mod_socratic{{/str}}</a></p>
+{{#hasrows}}
+<table class="generaltable">
+    <thead>
+        <tr>
+            <th>{{#str}}learner, mod_socratic{{/str}}</th>
+            <th>{{#str}}status, mod_socratic{{/str}}</th>
+            <th>{{#str}}interactions, mod_socratic{{/str}}</th>
+            <th>{{#str}}lastupdated, mod_socratic{{/str}}</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#rows}}
+        <tr>
+            <td>{{fullname}}</td>
+            <td>{{status}}</td>
+            <td>{{interactioncount}}</td>
+            <td>{{lastupdated}}</td>
+            <td><a href="{{url}}">{{#str}}viewconversation, mod_socratic{{/str}}</a></td>
+        </tr>
+        {{/rows}}
+    </tbody>
+</table>
+{{/hasrows}}
+{{^hasrows}}<div class="alert alert-info">{{#str}}noconversations, mod_socratic{{/str}}</div>{{/hasrows}}

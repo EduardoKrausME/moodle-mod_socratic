@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/socratic/db" VERSION="20260930" COMMENT="XMLDB file for mod_socratic"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+  <TABLES>
+    <TABLE NAME="socratic" COMMENT="Socratic activity configuration">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="objective" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="contentbase" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="tutorbehavior" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="maxinteractions" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="20" SEQUENCE="false"/>
+        <FIELD NAME="allowhint" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="allowfinalanswer" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="completioncriterion" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="interactions" SEQUENCE="false"/>
+        <FIELD NAME="completioninteractions" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="5" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="courseidx" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="socratic_conversations" COMMENT="Per-user Socratic conversations">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="socraticid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="active" SEQUENCE="false"/>
+        <FIELD NAME="interactioncount" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="completedreason" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="teachercompletedby" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="teachercompletedat" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="socraticid" TYPE="foreign" FIELDS="socraticid" REFTABLE="socratic" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="teachercompletedby" TYPE="foreign" FIELDS="teachercompletedby" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="socraticuser" UNIQUE="true" FIELDS="socraticid, userid"/>
+        <INDEX NAME="statusidx" UNIQUE="false" FIELDS="socraticid, status"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="socratic_messages" COMMENT="Messages stored in Socratic conversations">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="conversationid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="role" TYPE="char" LENGTH="12" NOTNULL="true" DEFAULT="user" SEQUENCE="false"/>
+        <FIELD NAME="messagetype" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="message" SEQUENCE="false"/>
+        <FIELD NAME="content" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="clientid" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="replytoid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="conversationid" TYPE="foreign" FIELDS="conversationid" REFTABLE="socratic_conversations" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="replytoid" TYPE="foreign" FIELDS="replytoid" REFTABLE="socratic_messages" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="convtime" UNIQUE="false" FIELDS="conversationid, timecreated"/>
+        <INDEX NAME="clientidx" UNIQUE="true" FIELDS="conversationid, clientid"/>
+        <INDEX NAME="replyidx" UNIQUE="false" FIELDS="replytoid"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

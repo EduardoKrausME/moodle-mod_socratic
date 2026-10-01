@@ -1,0 +1,67 @@
+{{!
+    @template mod_socratic/chat
+}}
+<div class="mod-socratic" data-region="socratic-root" data-cmid="{{cmid}}">
+    <div class="socratic-header">
+        <div>
+            <div class="socratic-kicker">{{#str}}assistancelabel, mod_socratic{{/str}}</div>
+            <h2>{{name}}</h2>
+        </div>
+        {{#canviewall}}
+            <a class="btn btn-secondary" href="{{conversationsurl}}">{{#str}}conversations, mod_socratic{{/str}}</a>
+        {{/canviewall}}
+    </div>
+
+    {{#intro}}<div class="socratic-intro">{{{intro}}}</div>{{/intro}}
+    <div class="socratic-objective">
+        <strong>{{#str}}objective, mod_socratic{{/str}}</strong>
+        <div>{{{objective}}}</div>
+    </div>
+
+    {{#hassupportfiles}}
+        <details class="socratic-support mb-3">
+            <summary>{{#str}}supportmaterials, mod_socratic{{/str}}</summary>
+            <ul>
+                {{#supportfiles}}
+                    <li>
+                        <a href="{{url}}">{{name}}</a>
+                        {{^processedincontext}}<span class="text-muted"> — {{#str}}unsupportedfilecontext, mod_socratic{{/str}}</span>{{/processedincontext}}
+                    </li>
+                {{/supportfiles}}
+            </ul>
+        </details>
+    {{/hassupportfiles}}
+
+    <div class="socratic-chat" aria-label="{{#str}}assistancelabel, mod_socratic{{/str}}">
+        <div class="socratic-messages" data-region="messages" role="list" aria-live="polite">
+            {{#messages}}
+                {{> mod_socratic/message}}
+            {{/messages}}
+        </div>
+
+        <div class="alert alert-warning {{^haspending}}d-none{{/haspending}}" data-region="send-error" role="alert">
+            <span data-region="send-error-text">{{#haspending}}{{#str}}retryableerror, mod_socratic{{/str}}{{/haspending}}</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary ml-2 {{^haspending}}d-none{{/haspending}}" data-action="retry">{{#str}}retry, mod_socratic{{/str}}</button>
+        </div>
+
+        <div class="socratic-status">
+            <span data-region="interaction-count">{{interactioncount}} / {{maxinteractions}}</span>
+            <span>{{#str}}interactions, mod_socratic{{/str}}</span>
+        </div>
+
+        <div class="socratic-composer {{#completed}}d-none{{/completed}}" data-region="composer">
+            <label class="sr-only" for="socratic-message-{{cmid}}">{{#str}}assistancelabel, mod_socratic{{/str}}</label>
+            <textarea id="socratic-message-{{cmid}}" class="form-control" rows="4" data-region="input" placeholder="{{#str}}placeholder, mod_socratic{{/str}}"></textarea>
+            <div class="socratic-actions mt-2">
+                <button type="button" class="btn btn-primary" data-action="send">{{#str}}send, mod_socratic{{/str}}</button>
+                {{#allowhint}}<button type="button" class="btn btn-outline-secondary" data-action="hint">{{#str}}hint, mod_socratic{{/str}}</button>{{/allowhint}}
+                {{#allowfinalanswer}}<button type="button" class="btn btn-outline-secondary" data-action="final">{{#str}}finalanswer, mod_socratic{{/str}}</button>{{/allowfinalanswer}}
+                <button type="button" class="btn btn-link" data-action="end">{{#str}}endconversation, mod_socratic{{/str}}</button>
+            </div>
+        </div>
+
+        <div class="alert alert-info {{^completed}}d-none{{/completed}}" data-region="completed-message">
+            {{#str}}conversationended, mod_socratic{{/str}}
+        </div>
+    </div>
+</div>

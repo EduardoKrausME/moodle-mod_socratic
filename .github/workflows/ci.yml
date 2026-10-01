@@ -36,10 +36,8 @@ jobs:
       matrix:
         database: [pgsql, mariadb]
         config:
-
           - php: '8.1'
             moodle: 'MOODLE_405_STABLE'
-
           - php: '8.3'
             moodle: 'MOODLE_502_STABLE'
 
@@ -63,6 +61,9 @@ jobs:
         echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
         sudo locale-gen en_AU.UTF-8
         echo "NVM_DIR=$HOME/.nvm" >> $GITHUB_ENV
+
+    - name: Queue local_ai_bridge dependency
+      run: moodle-plugin-ci add-plugin EduardoKrausME/moodle-local_ai_bridge --branch master
 
     - name: Install moodle-plugin-ci
       run: moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
@@ -114,6 +115,6 @@ jobs:
         retention-days: 7
         if-no-files-found: ignore
 
-    - name: Mark cancelled jobs as failed.
+    - name: Mark cancelled jobs as failed
       if: ${{ cancelled() }}
       run: exit 1
