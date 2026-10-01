@@ -62,9 +62,9 @@ final class completion_test extends advanced_testcase {
             'timecreated' => time(),
             'timemodified' => time(),
         ]);
-        rebuild_course_cache($course->id, true);
+        rebuild_course_cache((int)$course->id, true);
         $cm = get_fast_modinfo($course)->get_cm($activity->cmid);
-        $completion = new custom_completion($cm, $user->id);
+        $completion = new custom_completion($cm, (int)$user->id);
         $this->assertSame(COMPLETION_INCOMPLETE, $completion->get_state('completioncondition'));
 
         $DB->set_field('socratic_conversations', 'interactioncount', 2, ['id' => $conversationid]);
@@ -98,9 +98,9 @@ final class completion_test extends advanced_testcase {
             'timecreated' => time(),
             'timemodified' => time(),
         ]);
-        rebuild_course_cache($course->id, true);
+        rebuild_course_cache((int)$course->id, true);
         $cm = get_fast_modinfo($course)->get_cm($activity->cmid);
-        $completion = new custom_completion($cm, $user->id);
+        $completion = new custom_completion($cm, (int)$user->id);
         $this->assertSame(COMPLETION_COMPLETE, $completion->get_state('completioncondition'));
     }
 }
