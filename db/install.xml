@@ -26,7 +26,6 @@
         <KEY NAME="course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
       </KEYS>
       <INDEXES>
-        <INDEX NAME="courseidx" UNIQUE="false" FIELDS="course"/>
       </INDEXES>
     </TABLE>
 
@@ -76,7 +75,6 @@
       <INDEXES>
         <INDEX NAME="convtime" UNIQUE="false" FIELDS="conversationid, timecreated"/>
         <INDEX NAME="clientidx" UNIQUE="true" FIELDS="conversationid, clientid"/>
-        <INDEX NAME="replyidx" UNIQUE="false" FIELDS="replytoid"/>
       </INDEXES>
     </TABLE>
   </TABLES>
