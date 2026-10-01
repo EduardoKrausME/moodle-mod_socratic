@@ -1,25 +1,8 @@
 # mod_socratic
 
-Socratic AI tutoring activity for Moodle 4.5+.
+Socratic AI tutoring activity for Moodle.
 
 The activity guides learners through questions, justification, counterexamples and reflection instead of immediately giving the answer. All AI generation is routed exclusively through `local_ai_bridge` using the purpose `socratic-tutor`.
-
-## Requirements
-
-- Moodle 4.5 or newer
-- PHP version supported by the target Moodle release
-- `local_ai_bridge` version `2026093001` or newer
-- A tenant/purpose route configured in `local_ai_bridge` for `socratic-tutor`
-
-Dependency declared in `version.php`:
-
-```php
-$plugin->dependencies = [
-    'local_ai_bridge' => 2026093001,
-];
-```
-
-The module does not store provider API keys, model endpoints or provider credentials.
 
 ## Main behaviour
 
@@ -39,7 +22,7 @@ The system prompt enforces Socratic behaviour and grounding. The tutor must ask 
 
 ## Support files
 
-This version accepts only support formats it can process deterministically as UTF-8 text: TXT, Markdown, HTML, CSV, JSON and XML. Each file is limited to 1 MB, and the combined grounding context is still capped by the plugin setting before it is sent to the bridge. Binary formats such as PDF and DOCX are intentionally rejected in this first version rather than being stored with a misleading implication that their contents were understood.
+This version accepts only support formats it can process deterministically as UTF-8 text: TXT, Markdown, HTML, CSV, JSON and XML. Each file is limited to 1 MB, and the combined grounding context is still capped by the plugin setting before it is sent to the bridge. Binary formats such as PDF and DOCX are intentionally rejected in this the plugin rather than being stored with a misleading implication that their contents were understood.
 
 ## Conversation persistence and retries
 
@@ -62,7 +45,7 @@ Available completion modes:
 - after a teacher marks the conversation complete;
 - Moodle manual completion.
 
-No automatic grade is generated from subjective AI judgement in this version.
+No automatic grade is generated from subjective AI judgement in the plugin.
 
 ## Capabilities
 
@@ -99,24 +82,3 @@ The learner interface uses Mustache and AMD. It is intentionally presented as an
 ## Backup and restore
 
 Activity configuration, support files and, when user data is included, conversations/messages are supported by Moodle backup and restore.
-
-## Tests and CI
-
-The PHPUnit suite covers:
-
-- activity CRUD;
-- capabilities;
-- custom completion;
-- privacy/user discovery;
-- history bounding;
-- bridge error persistence;
-- duplicate submission, pending-turn recovery and idempotency;
-- HTML escaping in the message template.
-
-GitHub Actions first queues `EduardoKrausME/moodle-local_ai_bridge` as a dependent plugin, then runs `moodle-plugin-ci` and `EduardoKrausME/moodle-plugin-validate` against PostgreSQL and MariaDB, including Moodle 4.5.
-
-## License
-
-GNU GPL v3 or later.
-
-Copyright 2026 Eduardo Kraus.
