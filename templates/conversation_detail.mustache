@@ -1,14 +1,14 @@
 {{!
     @template mod_socratic/conversation_detail
 }}
-<p><a href="{{backurl}}">{{#str}}conversations, mod_socratic{{/str}}</a></p>
+<p><a href="{{{backurl}}}">{{#str}}conversations, mod_socratic{{/str}}</a></p>
 <div class="d-flex justify-content-between align-items-start mb-3">
     <div>
         <h2>{{learner}}</h2>
         <div>{{status}} · {{interactioncount}} {{#str}}interactions, mod_socratic{{/str}}</div>
     </div>
     {{#canmarkcomplete}}
-        <a class="btn btn-primary" href="{{markcompleteurl}}">{{#str}}markcomplete, mod_socratic{{/str}}</a>
+        <a class="btn btn-primary" href="{{{markcompleteurl}}}">{{#str}}markcomplete, mod_socratic{{/str}}</a>
     {{/canmarkcomplete}}
 </div>
 <div class="socratic-messages" role="list">

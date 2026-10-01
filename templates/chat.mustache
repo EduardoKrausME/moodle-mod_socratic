@@ -8,7 +8,7 @@
             <h2>{{name}}</h2>
         </div>
         {{#canviewall}}
-            <a class="btn btn-secondary" href="{{conversationsurl}}">{{#str}}conversations, mod_socratic{{/str}}</a>
+            <a class="btn btn-secondary" href="{{{conversationsurl}}}">{{#str}}conversations, mod_socratic{{/str}}</a>
         {{/canviewall}}
     </div>
 
@@ -24,7 +24,7 @@
             <ul>
                 {{#supportfiles}}
                     <li>
-                        <a href="{{url}}">{{name}}</a>
+                        <a href="{{{url}}}">{{name}}</a>
                         {{^processedincontext}}<span class="text-muted"> — {{#str}}unsupportedfilecontext, mod_socratic{{/str}}</span>{{/processedincontext}}
                     </li>
                 {{/supportfiles}}

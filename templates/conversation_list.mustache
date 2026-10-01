@@ -1,7 +1,7 @@
 {{!
     @template mod_socratic/conversation_list
 }}
-<p><a href="{{activityurl}}">{{#str}}backtoactivity, mod_socratic{{/str}}</a></p>
+<p><a href="{{{activityurl}}}">{{#str}}backtoactivity, mod_socratic{{/str}}</a></p>
 {{#hasrows}}
 <table class="generaltable">
     <thead>
@@ -20,7 +20,7 @@
             <td>{{status}}</td>
             <td>{{interactioncount}}</td>
             <td>{{lastupdated}}</td>
-            <td><a href="{{url}}">{{#str}}viewconversation, mod_socratic{{/str}}</a></td>
+            <td><a href="{{{url}}}">{{#str}}viewconversation, mod_socratic{{/str}}</a></td>
         </tr>
         {{/rows}}
     </tbody>
