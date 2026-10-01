@@ -62,7 +62,7 @@ final class conversation_service_test extends advanced_testcase {
         $service = new conversation_service($client);
 
         try {
-            $service->send($socratic, $cm, $user->id, 'My reasoning', 'message', 'client-1');
+            $service->send($socratic, $cm, (int)$user->id, 'My reasoning', 'message', 'client-1');
             $this->fail('Expected an AI error.');
         } catch (moodle_exception $e) {
             $this->assertSame('aiunavailable', $e->errorcode);
@@ -99,7 +99,7 @@ final class conversation_service_test extends advanced_testcase {
         };
         $service = new conversation_service($failingclient);
         try {
-            $service->send($socratic, $cm, $user->id, 'My first reasoning', 'message', 'retry-client-id');
+            $service->send($socratic, $cm, (int)$user->id, 'My first reasoning', 'message', 'retry-client-id');
             $this->fail('Expected an AI error.');
         } catch (moodle_exception $e) {
             $this->assertSame('aiunavailable', $e->errorcode);
@@ -118,7 +118,7 @@ final class conversation_service_test extends advanced_testcase {
         };
         $blockingservice = new conversation_service($blockingclient);
         try {
-            $blockingservice->send($socratic, $cm, $user->id, 'Skip pending turn', 'message', 'different-client-id');
+            $blockingservice->send($socratic, $cm, (int)$user->id, 'Skip pending turn', 'message', 'different-client-id');
             $this->fail('Expected the pending response guard.');
         } catch (moodle_exception $e) {
             $this->assertSame('pendingresponse', $e->errorcode);
@@ -146,7 +146,7 @@ final class conversation_service_test extends advanced_testcase {
         $result = $service->send(
             $socratic,
             $cm,
-            $user->id,
+            (int)$user->id,
             'This text must not create a second learner message.',
             'message',
             'retry-client-id'
@@ -154,7 +154,7 @@ final class conversation_service_test extends advanced_testcase {
 
         $conversation = $DB->get_record('socratic_conversations', [
             'socraticid' => $activity->id,
-            'userid' => $user->id,
+            'userid' => (int)$user->id,
         ], '*', MUST_EXIST);
         $this->assertSame(1, (int)$conversation->interactioncount);
         $this->assertSame(1, $workingclient->calls);
@@ -203,8 +203,8 @@ final class conversation_service_test extends advanced_testcase {
             }
         };
         $service = new conversation_service($client);
-        $first = $service->send($socratic, $cm, $user->id, 'Because of A.', 'message', 'same-client-id');
-        $second = $service->send($socratic, $cm, $user->id, 'Because of A.', 'message', 'same-client-id');
+        $first = $service->send($socratic, $cm, (int)$user->id, 'Because of A.', 'message', 'same-client-id');
+        $second = $service->send($socratic, $cm, (int)$user->id, 'Because of A.', 'message', 'same-client-id');
 
         $this->assertSame($first['messageid'], $second['messageid']);
         $this->assertSame(1, $client->calls);
@@ -243,7 +243,7 @@ final class conversation_service_test extends advanced_testcase {
         };
         $service = new conversation_service($client);
         for ($i = 0; $i < 4; $i++) {
-            $service->send($socratic, $cm, $user->id, 'Turn ' . $i, 'message', 'client-' . $i);
+            $service->send($socratic, $cm, (int)$user->id, 'Turn ' . $i, 'message', 'client-' . $i);
         }
 
         $last = end($client->calls);
@@ -282,7 +282,7 @@ final class conversation_service_test extends advanced_testcase {
 
         $course = $this->getDataGenerator()->create_course(['enablecompletion' => 1]);
         $user = $this->getDataGenerator()->create_user();
-        $this->getDataGenerator()->enrol_user($user->id, $course->id, 'student');
+        $this->getDataGenerator()->enrol_user((int)$user->id, $course->id, 'student');
         $activity = $this->getDataGenerator()->create_module('socratic', [
             'course' => $course->id,
             'completion' => COMPLETION_TRACKING_AUTOMATIC,
