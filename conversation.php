@@ -49,14 +49,14 @@ if ($groupmode == SEPARATEGROUPS && !has_capability('moodle/site:accessallgroups
 if (optional_param('markcomplete', 0, PARAM_BOOL)) {
     require_sesskey();
     if ($socratic->completioncriterion === SOCRATIC_COMPLETION_TEACHER) {
-        $service = new \mod_socratic\local\conversation_service();
+        $service = new \mod_socratic\conversation_service();
         $conversation = $service->teacher_complete($socratic, $cm, $conversation, (int)$USER->id);
         redirect($conversationurl, get_string('completionupdated', 'mod_socratic'));
     }
 }
 
 $learner = core_user::get_user($conversation->userid, '*', MUST_EXIST);
-$service = new \mod_socratic\local\conversation_service();
+$service = new \mod_socratic\conversation_service();
 $messages = $service->get_messages((int)$conversation->id);
 
 $PAGE->set_title(get_string('conversation', 'mod_socratic'));

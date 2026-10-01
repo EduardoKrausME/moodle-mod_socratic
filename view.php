@@ -31,7 +31,7 @@ $context = context_module::instance($cm->id);
 require_capability('mod/socratic:view', $context);
 
 $socratic = $DB->get_record('socratic', ['id' => $cm->instance], '*', MUST_EXIST);
-$service = new \mod_socratic\local\conversation_service();
+$service = new \mod_socratic\conversation_service();
 $conversation = $service->get_conversation($socratic, $cm, (int)$USER->id, false);
 $messages = $conversation ? $service->get_messages((int)$conversation->id) : [];
 $pendingmessage = ($conversation && $conversation->status === 'active')

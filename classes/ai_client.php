@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_socratic\local;
+namespace mod_socratic;
 
 /**
  * Thin adapter around local_ai_bridge.

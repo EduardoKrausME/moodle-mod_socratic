@@ -26,15 +26,15 @@ declare(strict_types=1);
 namespace mod_socratic;
 
 use advanced_testcase;
-use mod_socratic\local\ai_client;
-use mod_socratic\local\conversation_service;
+use mod_socratic\ai_client;
+use mod_socratic\conversation_service;
 use moodle_exception;
 
 /**
  * Conversation, history, error and idempotency tests.
  *
  * @package mod_socratic
- * @covers \mod_socratic\local\conversation_service
+ * @covers \mod_socratic\conversation_service
  */
 final class conversation_service_test extends advanced_testcase {
     /**
