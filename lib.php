@@ -22,8 +22,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /** @var string Completion after a configured number of interactions. */
 define('SOCRATIC_COMPLETION_INTERACTIONS', 'interactions');
 /** @var string Completion when the conversation is ended. */
