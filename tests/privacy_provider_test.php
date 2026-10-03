@@ -107,6 +107,6 @@ final class privacy_provider_test extends advanced_testcase {
         ]);
 
         $contexts = provider::get_contexts_for_userid((int)$teacher->id);
-        $this->assertContains((int)$context->id, $contexts->get_contextids());
+        $this->assertContains((int)$context->id, array_map('intval', $contexts->get_contextids()));
     }
 }
