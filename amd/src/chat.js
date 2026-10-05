@@ -1,4 +1,25 @@
 // This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Client-side controller for the Socratic chat activity.
+ *
+ * @module     mod_socratic/chat
+ * @copyright  2026 Eduardo Kraus {@link https://eduardokraus.com}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 import Ajax from 'core/ajax';
 import Templates from 'core/templates';
@@ -28,7 +49,7 @@ const scrollMessages = () => {
     messages.scrollTop = messages.scrollHeight;
 };
 
-const appendMessage = async(isuser, content, clientid = '') => {
+const appendMessage = async (isuser, content, clientid = '') => {
     const result = await Templates.renderForPromise('mod_socratic/message', {
         isuser,
         isassistant: !isuser,
@@ -67,17 +88,17 @@ const updateCount = (used, max) => {
     root.querySelector('[data-region="interaction-count"]').textContent = `${used} / ${max}`;
 };
 
-const requestTurn = async(turn, appendUser = true) => {
+const requestTurn = async (turn, appendUser = true) => {
     if (busy) {
         return;
     }
     clearError();
     setBusy(true);
     let provisional = null;
-    if (appendUser) {
-        provisional = await appendMessage(true, turn.display, turn.clientid);
-    }
     try {
+        if (appendUser) {
+            provisional = await appendMessage(true, turn.display, turn.clientid);
+        }
         const result = await Ajax.call([{
             methodname: 'mod_socratic_send_message',
             args: {
@@ -133,7 +154,7 @@ const startTurn = (action) => {
     requestTurn(turn, true);
 };
 
-const endConversation = async() => {
+const endConversation = async () => {
     if (busy) {
         return;
     }
@@ -144,6 +165,7 @@ const endConversation = async() => {
             methodname: 'mod_socratic_end_conversation',
             args: {cmid: config.cmid},
         }])[0];
+        pending = null;
         markCompleted();
     } catch (error) {
         Notification.exception(error);
