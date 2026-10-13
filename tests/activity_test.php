@@ -75,6 +75,70 @@ final class activity_test extends advanced_testcase {
     }
 
     /**
+     * A general course reset preserves conversations; opting in deletes them.
+     *
+     * @return void
+     */
+    public function test_course_reset_requires_opt_in(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course(['enablecompletion' => 1]);
+        $user = $this->getDataGenerator()->create_user();
+        $activity = $this->getDataGenerator()->create_module('socratic', ['course' => $course->id]);
+        $conversationid = $DB->insert_record('socratic_conversations', (object)[
+            'socraticid' => $activity->id,
+            'userid' => $user->id,
+            'status' => 'active',
+            'interactioncount' => 1,
+            'timecreated' => time(),
+            'timemodified' => time(),
+        ]);
+        $DB->insert_record('socratic_messages', (object)[
+            'conversationid' => $conversationid,
+            'userid' => $user->id,
+            'role' => 'user',
+            'messagetype' => 'message',
+            'content' => 'Learner message',
+            'timecreated' => time(),
+        ]);
+        $this->assertSame(['reset_socratic' => 0], socratic_reset_course_form_defaults($course));
+        $this->assertEmpty(socratic_reset_userdata((object)['courseid' => $course->id]));
+        $this->assertTrue($DB->record_exists('socratic_conversations', ['id' => $conversationid]));
+        $this->assertTrue($DB->record_exists('socratic_messages', ['conversationid' => $conversationid]));
+        $this->assertCount(1, socratic_reset_userdata((object)[
+            'courseid' => $course->id,
+            'reset_socratic' => 1,
+        ]));
+        $this->assertFalse($DB->record_exists('socratic_conversations', ['id' => $conversationid]));
+        $this->assertFalse($DB->record_exists('socratic_messages', ['conversationid' => $conversationid]));
+    }
+
+    /**
+     * Updating an activity must preserve the core completion mode.
+     *
+     * @return void
+     */
+    public function test_completion_tracking_mode_is_preserved(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course(['enablecompletion' => 1]);
+        foreach ([COMPLETION_TRACKING_NONE, COMPLETION_TRACKING_MANUAL, COMPLETION_TRACKING_AUTOMATIC] as $mode) {
+            $activity = $this->getDataGenerator()->create_module('socratic', [
+                'course' => $course->id,
+                'completion' => $mode,
+                'completioncriterion' => SOCRATIC_COMPLETION_INTERACTIONS,
+            ]);
+            $this->assertEquals($mode, $DB->get_field('course_modules', 'completion', ['id' => $activity->cmid]));
+            $record = $DB->get_record('socratic', ['id' => $activity->id], '*', MUST_EXIST);
+            $record->instance = $record->id;
+            $record->coursemodule = $activity->cmid;
+            $record->name = 'Updated Socratic activity';
+            socratic_update_instance($record);
+            $this->assertEquals($mode, $DB->get_field('course_modules', 'completion', ['id' => $activity->cmid]));
+        }
+    }
+
+    /**
      * Method test_capabilities_for_student_and_teacher.
      *
      * @return void Return value.

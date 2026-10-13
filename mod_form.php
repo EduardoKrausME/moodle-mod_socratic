@@ -95,6 +95,7 @@ class mod_socratic_mod_form extends moodleform_mod {
         $criterionfield = 'completioncriterion' . $suffix;
         $interactionsfield = 'completioninteractions' . $suffix;
         $options = [
+            SOCRATIC_COMPLETION_NONE => get_string('completioncriterion:none', 'mod_socratic'),
             SOCRATIC_COMPLETION_INTERACTIONS => get_string('completioncriterion:interactions', 'mod_socratic'),
             SOCRATIC_COMPLETION_ENDED => get_string('completioncriterion:ended', 'mod_socratic'),
             SOCRATIC_COMPLETION_TEACHER => get_string('completioncriterion:teacher', 'mod_socratic'),
@@ -118,24 +119,8 @@ class mod_socratic_mod_form extends moodleform_mod {
      */
     public function completion_rule_enabled($data): bool {
         $field = 'completioncriterion' . $this->get_suffix();
-        return !empty($data[$field]) && $data[$field] !== SOCRATIC_COMPLETION_MANUAL;
-    }
-
-    /**
-     * Ensures Moodle's completion tracking mode matches the selected criterion.
-     *
-     * @param stdClass $data
-     * @return void
-     */
-    public function data_postprocessing($data): void {
-        parent::data_postprocessing($data);
-        $suffix = $this->get_suffix();
-        $field = 'completioncriterion' . $suffix;
-        if ($suffix === '' && !empty($data->{$field})) {
-            $data->completion = $data->{$field} === SOCRATIC_COMPLETION_MANUAL
-                ? COMPLETION_TRACKING_MANUAL
-                : COMPLETION_TRACKING_AUTOMATIC;
-        }
+        return !empty($data[$field]) &&
+            !in_array($data[$field], [SOCRATIC_COMPLETION_MANUAL, SOCRATIC_COMPLETION_NONE], true);
     }
 
     /**
@@ -179,7 +164,8 @@ class mod_socratic_mod_form extends moodleform_mod {
         if ((int)$data['maxinteractions'] < 1 || (int)$data['maxinteractions'] > 200) {
             $errors['maxinteractions'] = get_string('invaliddata', 'error');
         }
-        if (($data['completioncriterion'] ?? '') === SOCRATIC_COMPLETION_INTERACTIONS) {
+        if (($data['completion'] ?? COMPLETION_TRACKING_NONE) == COMPLETION_TRACKING_AUTOMATIC &&
+                ($data['completioncriterion'] ?? '') === SOCRATIC_COMPLETION_INTERACTIONS) {
             $required = (int)($data['completioninteractions'] ?? 0);
             if ($required < 1 || $required > (int)$data['maxinteractions']) {
                 $errors['completioninteractions'] = get_string('invaliddata', 'error');

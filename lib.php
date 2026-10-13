@@ -28,8 +28,10 @@ define('SOCRATIC_COMPLETION_INTERACTIONS', 'interactions');
 define('SOCRATIC_COMPLETION_ENDED', 'ended');
 /** @var string Completion after teacher confirmation. */
 define('SOCRATIC_COMPLETION_TEACHER', 'teacher');
-/** @var string Moodle manual completion. */
+/** @var string Moodle manual completion (legacy activity criterion). */
 define('SOCRATIC_COMPLETION_MANUAL', 'manual');
+/** @var string No custom completion criterion. */
+define('SOCRATIC_COMPLETION_NONE', 'none');
 
 /**
  * Declares Moodle feature support.
@@ -70,7 +72,6 @@ function socratic_add_instance(stdClass $data, ?mod_socratic_mod_form $mform = n
     $data->id = $id;
 
     socratic_save_support_files($data);
-    socratic_sync_completion_tracking($data);
     return $id;
 }
 
@@ -89,7 +90,6 @@ function socratic_update_instance(stdClass $data, ?mod_socratic_mod_form $mform 
     $result = $DB->update_record('socratic', $data);
 
     socratic_save_support_files($data);
-    socratic_sync_completion_tracking($data);
     return $result;
 }
 
@@ -149,25 +149,6 @@ function socratic_save_support_files(stdClass $data): void {
         0,
         $options
     );
-}
-
-/**
- * Keeps the Moodle completion tracking mode aligned with the activity criterion.
- *
- * @param stdClass $data
- * @return void
- */
-function socratic_sync_completion_tracking(stdClass $data): void {
-    global $DB;
-
-    if (empty($data->coursemodule) || !isset($data->completioncriterion)) {
-        return;
-    }
-    $completion = $data->completioncriterion === SOCRATIC_COMPLETION_MANUAL
-        ? COMPLETION_TRACKING_MANUAL
-        : COMPLETION_TRACKING_AUTOMATIC;
-    $DB->set_field('course_modules', 'completion', $completion, ['id' => (int)$data->coursemodule]);
-    rebuild_course_cache((int)$data->course, true);
 }
 
 /**
@@ -258,6 +239,27 @@ function mod_socratic_pluginfile($course, $cm, $context, $filearea, $args, $forc
 }
 
 /**
+ * Adds an opt-in option to the course reset form.
+ *
+ * @param MoodleQuickForm $mform
+ * @return void
+ */
+function socratic_reset_course_form_definition(&$mform): void {
+    $mform->addElement('header', 'socraticresetheader', get_string('modulenameplural', 'mod_socratic'));
+    $mform->addElement('advcheckbox', 'reset_socratic', get_string('resetconversations', 'mod_socratic'));
+}
+
+/**
+ * Preserves Socratic conversations by default during course reset.
+ *
+ * @param stdClass $course
+ * @return array
+ */
+function socratic_reset_course_form_defaults(stdClass $course): array {
+    return ['reset_socratic' => 0];
+}
+
+/**
  * Course reset callback.
  *
  * @param stdClass $data
@@ -267,6 +269,10 @@ function socratic_reset_userdata(stdClass $data): array {
     global $DB;
 
     $status = [];
+    if (empty($data->reset_socratic)) {
+        return $status;
+    }
+
     $instances = $DB->get_fieldset_select('socratic', 'id', 'course = :course', ['course' => $data->courseid]);
     if (!$instances) {
         return $status;
@@ -278,6 +284,16 @@ function socratic_reset_userdata(stdClass $data): array {
         $DB->delete_records_select('socratic_messages', "conversationid {$msgsql}", $msgparams);
     }
     $DB->delete_records_select('socratic_conversations', "socraticid {$insql}", $params);
+
+    // Reset completion only for Socratic activities whose conversations were cleared.
+    $completion = new completion_info(get_course((int)$data->courseid));
+    foreach ($instances as $instanceid) {
+        $cm = get_coursemodule_from_instance('socratic', (int)$instanceid, (int)$data->courseid,
+            false, IGNORE_MISSING);
+        if ($cm && $completion->is_enabled($cm)) {
+            $completion->reset_all_state($cm);
+        }
+    }
     $status[] = [
         'component' => get_string('modulenameplural', 'mod_socratic'),
         'item' => get_string('conversations', 'mod_socratic'),

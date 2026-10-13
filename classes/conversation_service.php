@@ -60,12 +60,12 @@ class conversation_service {
      * Returns the single conversation for this learner/activity, creating it when requested.
      *
      * @param \stdClass $socratic
-     * @param \stdClass $cm
+     * @param \cm_info|\stdClass $cm
      * @param int $userid
      * @param bool $create
      * @return \stdClass|null
      */
-    public function get_conversation(\stdClass $socratic, \stdClass $cm, int $userid, bool $create = true): ?\stdClass {
+    public function get_conversation(\stdClass $socratic, \cm_info|\stdClass $cm, int $userid, bool $create = true): ?\stdClass {
         global $DB;
 
         $conversation = $DB->get_record('socratic_conversations', [
@@ -109,14 +109,14 @@ class conversation_service {
      * never make the learner lose what they submitted.
      *
      * @param \stdClass $socratic
-     * @param \stdClass $cm
+     * @param \cm_info|\stdClass $cm
      * @param int $userid
      * @param string $message
      * @param string $action
      * @param string $clientid
      * @return array
      */
-    public function send(\stdClass $socratic, \stdClass $cm, int $userid, string $message,
+    public function send(\stdClass $socratic, \cm_info|\stdClass $cm, int $userid, string $message,
             string $action, string $clientid): array {
         global $DB;
 
@@ -247,11 +247,11 @@ class conversation_service {
      * Ends a learner conversation.
      *
      * @param \stdClass $socratic
-     * @param \stdClass $cm
+     * @param \cm_info|\stdClass $cm
      * @param int $userid
      * @return \stdClass
      */
-    public function end(\stdClass $socratic, \stdClass $cm, int $userid): \stdClass {
+    public function end(\stdClass $socratic, \cm_info|\stdClass $cm, int $userid): \stdClass {
         $factory = lock_config::get_lock_factory('mod_socratic_conversation');
         $lock = $factory->get_lock('activity:' . $socratic->id . ':user:' . $userid, 10);
         if (!$lock) {
@@ -272,12 +272,12 @@ class conversation_service {
      * Marks a learner conversation complete by a teacher.
      *
      * @param \stdClass $socratic
-     * @param \stdClass $cm
+     * @param \cm_info|\stdClass $cm
      * @param \stdClass $conversation
      * @param int $teacherid
      * @return \stdClass
      */
-    public function teacher_complete(\stdClass $socratic, \stdClass $cm, \stdClass $conversation, int $teacherid): \stdClass {
+    public function teacher_complete(\stdClass $socratic, \cm_info|\stdClass $cm, \stdClass $conversation, int $teacherid): \stdClass {
         global $DB;
 
         $factory = lock_config::get_lock_factory('mod_socratic_conversation');
@@ -360,13 +360,13 @@ class conversation_service {
      * Completes a conversation and emits the event once.
      *
      * @param \stdClass $socratic
-     * @param \stdClass $cm
+     * @param \cm_info|\stdClass $cm
      * @param \stdClass $conversation
      * @param string $reason
      * @param int $actorid
      * @return \stdClass
      */
-    private function complete(\stdClass $socratic, \stdClass $cm, \stdClass $conversation,
+    private function complete(\stdClass $socratic, \cm_info|\stdClass $cm, \stdClass $conversation,
             string $reason, int $actorid): \stdClass {
         global $DB;
 
@@ -386,13 +386,13 @@ class conversation_service {
      * Emits the completion event.
      *
      * @param \stdClass $socratic
-     * @param \stdClass $cm
+     * @param \cm_info|\stdClass $cm
      * @param \stdClass $conversation
      * @param string $reason
      * @param int $actorid
      * @return void
      */
-    private function trigger_completed_event(\stdClass $socratic, \stdClass $cm, \stdClass $conversation,
+    private function trigger_completed_event(\stdClass $socratic, \cm_info|\stdClass $cm, \stdClass $conversation,
             string $reason, int $actorid): void {
         $context = context_module::instance($cm->id);
         $event = \mod_socratic\event\conversation_completed::create([
@@ -411,11 +411,11 @@ class conversation_service {
      * Re-evaluates custom completion for a learner.
      *
      * @param \stdClass $socratic
-     * @param \stdClass $cm
+     * @param \cm_info|\stdClass $cm
      * @param int $userid
      * @return void
      */
-    private function refresh_completion(\stdClass $socratic, \stdClass $cm, int $userid): void {
+    private function refresh_completion(\stdClass $socratic, \cm_info|\stdClass $cm, int $userid): void {
         $course = get_course((int)$socratic->course);
         $completion = new completion_info($course);
         if ($completion->is_enabled($cm)) {

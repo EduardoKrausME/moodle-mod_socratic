@@ -253,6 +253,34 @@ final class conversation_service_test extends advanced_testcase {
     }
 
     /**
+     * cm_info returned by Moodle works across the chat operations.
+     *
+     * @return void
+     */
+    public function test_cm_info_for_conversation_operations(): void {
+        $this->resetAfterTest();
+        [$course, $activity, $user, , $socratic] = $this->fixture();
+        $this->setUser($user);
+        $cm = get_fast_modinfo($course)->get_cm($activity->cmid);
+        $client = new class extends ai_client {
+            /**
+             * @param array $messages
+             * @return string
+             */
+            public function generate(array $messages): string {
+                return 'What evidence supports your idea?';
+            }
+        };
+        $service = new conversation_service($client);
+        $conversation = $service->get_conversation($socratic, $cm, (int)$user->id);
+        $this->assertNotNull($conversation);
+        $reply = $service->send($socratic, $cm, (int)$user->id, 'My reason', 'message', 'cm-info-test');
+        $this->assertSame('What evidence supports your idea?', $reply['assistant']);
+        $ended = $service->end($socratic, $cm, (int)$user->id);
+        $this->assertSame('completed', $ended->status);
+    }
+
+    /**
      * Method test_message_template_escapes_html.
      *
      * @return void Return value.

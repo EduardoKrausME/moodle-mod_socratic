@@ -21,6 +21,9 @@
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+require_once(__DIR__ . '/restore_socratic_stepslib.php');
+
 class restore_socratic_activity_task extends restore_activity_task {
     /**
      * No custom task settings are required.

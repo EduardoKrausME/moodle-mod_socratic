@@ -21,6 +21,9 @@
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+require_once(__DIR__ . '/backup_socratic_stepslib.php');
+
 class backup_socratic_activity_task extends backup_activity_task {
     /**
      * No custom task settings are required.

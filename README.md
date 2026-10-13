@@ -79,6 +79,14 @@ It covers both learner conversation ownership and the teacher identifier recorde
 
 The learner interface uses Mustache and AMD. It is intentionally presented as an "AI learning assistant" rather than a generic chatbot. The composer uses asynchronous Moodle external functions, disables controls during a request and allows retry after a recoverable AI failure.
 
+## Bug reports
+
+Use the [GitHub issue tracker](https://github.com/EduardoKrausME/moodle-mod_socratic/issues) to report problems or request changes.
+
+## Installation archive
+
+Moodle's ZIP installer requires a single root directory named `socratic/`. The `Package Moodle plugin` workflow produces an installable `mod_socratic.zip` without creating a version or a release. GitHub's automatically generated **Source code** archives have a different root directory name.
+
 ## Backup and restore
 
 Activity configuration, reference files and, when user data is included, conversations/messages are included in Moodle backup and restore.
