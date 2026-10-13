@@ -264,6 +264,8 @@ final class conversation_service_test extends advanced_testcase {
         $cm = get_fast_modinfo($course)->get_cm($activity->cmid);
         $client = new class extends ai_client {
             /**
+             * Generates the stub tutor reply.
+             *
              * @param array $messages
              * @return string
              */

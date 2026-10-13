@@ -22,8 +22,13 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/backup_socratic_stepslib.php');
 
+/**
+ * Backs up a Socratic activity through Moodle's backup API.
+ */
 class backup_socratic_activity_task extends backup_activity_task {
     /**
      * No custom task settings are required.

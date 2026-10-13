@@ -22,8 +22,13 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/restore_socratic_stepslib.php');
 
+/**
+ * Restores a Socratic activity through Moodle's restore API.
+ */
 class restore_socratic_activity_task extends restore_activity_task {
     /**
      * No custom task settings are required.

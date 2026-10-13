@@ -277,7 +277,8 @@ class conversation_service {
      * @param int $teacherid
      * @return \stdClass
      */
-    public function teacher_complete(\stdClass $socratic, \cm_info|\stdClass $cm, \stdClass $conversation, int $teacherid): \stdClass {
+    public function teacher_complete(\stdClass $socratic, \cm_info|\stdClass $cm,
+            \stdClass $conversation, int $teacherid): \stdClass {
         global $DB;
 
         $factory = lock_config::get_lock_factory('mod_socratic_conversation');
