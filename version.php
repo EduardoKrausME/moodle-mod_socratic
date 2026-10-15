@@ -25,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'mod_socratic';
-$plugin->version = 2026101300;
-$plugin->release = '1.1.3';
+$plugin->version = 2026101500;
+$plugin->release = '1.1.4';
 $plugin->requires = 2024100700;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
