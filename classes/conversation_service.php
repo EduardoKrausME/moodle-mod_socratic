@@ -26,7 +26,6 @@ namespace mod_socratic;
 
 use completion_info;
 use context_module;
-use core_text;
 use core\lock\lock_config;
 use moodle_exception;
 use Throwable;
@@ -134,7 +133,7 @@ class conversation_service {
         } else if ($action === 'final') {
             $message = get_string('finalanswer', 'mod_socratic');
         }
-        $message = core_text::substr($message, 0, 12000);
+        $message = substr($message, 0, 12000);
 
         $factory = lock_config::get_lock_factory('mod_socratic_conversation');
         $lock = $factory->get_lock('activity:' . $socratic->id . ':user:' . $userid, 10);
@@ -223,7 +222,7 @@ class conversation_service {
                 'userid' => $userid,
                 'role' => 'assistant',
                 'messagetype' => 'message',
-                'content' => core_text::substr($assistanttext, 0, 24000),
+                'content' => substr($assistanttext, 0, 24000),
                 'clientid' => null,
                 'replytoid' => $usermessage->id,
                 'timecreated' => time(),

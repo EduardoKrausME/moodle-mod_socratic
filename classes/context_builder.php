@@ -25,7 +25,6 @@
 namespace mod_socratic;
 
 use context_module;
-use core_text;
 use stored_file;
 
 /**
@@ -96,12 +95,12 @@ class context_builder {
      */
     private function system_instruction(\stdClass $socratic, context_module $context, string $action): string {
         $maxchars = max(4000, min(60000, (int)(get_config('mod_socratic', 'maxcontextchars') ?: 24000)));
-        $objective = core_text::substr($this->plain_text((string)$socratic->objective), 0, 4000);
+        $objective = substr($this->plain_text((string)$socratic->objective), 0, 4000);
         $base = $this->plain_text((string)$socratic->contentbase);
-        $files = $this->support_file_text($context, max(0, $maxchars - core_text::strlen($base)));
-        $grounding = core_text::substr(trim($base . "\n\n" . $files), 0, $maxchars);
+        $files = $this->support_file_text($context, max(0, $maxchars - strlen($base)));
+        $grounding = substr(trim($base . "\n\n" . $files), 0, $maxchars);
 
-        $teacherbehavior = core_text::substr(trim($this->plain_text((string)$socratic->tutorbehavior)), 0, 4000);
+        $teacherbehavior = substr(trim($this->plain_text((string)$socratic->tutorbehavior)), 0, 4000);
         $finalrule = !empty($socratic->allowfinalanswer)
             ? 'A final answer may be given only when the learner explicitly requests the final answer.'
             : 'Never provide the final solution or final answer. Continue with questions, hints, checks and partial scaffolding.';
@@ -178,9 +177,9 @@ PROMPT;
                 continue;
             }
             $piece = "[Support file: {$file->get_filename()}]\n" . $content;
-            $piece = core_text::substr($piece, 0, $remainingchars);
+            $piece = substr($piece, 0, $remainingchars);
             $parts[] = $piece;
-            $remainingchars -= core_text::strlen($piece);
+            $remainingchars -= strlen($piece);
         }
         return implode("\n\n", $parts);
     }
