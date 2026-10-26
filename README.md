@@ -83,10 +83,6 @@ The learner interface uses Mustache and AMD. It is intentionally presented as an
 
 Use the [GitHub issue tracker](https://github.com/EduardoKrausME/moodle-mod_socratic/issues) to report problems or request changes.
 
-## Installation archive
-
-Moodle's ZIP installer requires a single root directory named `socratic/`. The `Package Moodle plugin` workflow produces an installable `mod_socratic.zip` without creating a version or a release. GitHub's automatically generated **Source code** archives have a different root directory name.
-
 ## Backup and restore
 
 Activity configuration, reference files and, when user data is included, conversations/messages are included in Moodle backup and restore.
